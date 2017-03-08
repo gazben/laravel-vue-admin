@@ -5,6 +5,8 @@ If the frontend symlinking fails on windows you have to run it as Administrator 
 
 ## Building
 
+Before you run build:watch you have to run build:dev or build:prod to create the symlinks. If you are using windows, you have to run it as administrator.
+
 Frontend build commands:
   - ```php artisan build:install```  install the frontend dependencies
   - ```php artisan build:dev```  builds the frontend in dev mode
