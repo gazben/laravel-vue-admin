@@ -96,7 +96,7 @@ class BuildProd extends Command
         }
 
         $this->info('Writing app.blade.php...');
-        $this->info($index);
+        // $this->info($index);
         file_put_contents($appBladePath, $index);
     }
 }
