@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
@@ -65,14 +66,19 @@ class BuildDev extends Command
         foreach ($res as $entry) {
             $target = resource_path('assets' . DIRECTORY_SEPARATOR .'frontend' . DIRECTORY_SEPARATOR . 'dist'  . DIRECTORY_SEPARATOR . $entry);
             $link = public_path($entry);
+            $this->info('Creating symlink. Target: ' . $target . ' Link: ' . $link);
             if (file_exists($target) && !file_exists($link)) {
-                $this->info('Creating symlink. Target: ' . $target . ' Link: ' . $link);
-                if(!symlink($target, $link)){
-                    $this->error('symlink creation failed');
+                try{
+                    if(!symlink($target, $link)){
+                        $this->error('Symlink creation failed!');
+                    }
+                } catch(Exception $exception){
+                    $this->error('Symlink creation failed! Cause: ' . $exception->getMessage() .' You have to link manually:');
+                    $this->error('ln -s ' . $target . ' ' . $link);
                 }
             } else {
-                $this->info('Symlink creation skipped:');
-                $this->info('Target exists: ' . file_exists($target) . ' Link exists: ' . file_exists($link));
+                $this->info('Symlink creation skipped. Target exists: ' . (file_exists($target) ? 'true' : 'false')
+                    . ' Link exists: ' . (file_exists($link) ? 'true' : 'false') );
             }
         }
 
